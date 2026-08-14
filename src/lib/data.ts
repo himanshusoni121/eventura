@@ -6,7 +6,7 @@ export const siteConfig = {
   name: "Eventura",
   tagline: "Creating Extraordinary Experiences That Last Forever",
   description:
-    "Luxury Event Planning & Management in Jodhpur, Rajasthan. From grand weddings to corporate galas, we craft unforgettable moments.",
+    "Premier Event Management Company & Luxury Wedding Planner in Jodhpur, Rajasthan. Specializing in royal destination weddings, corporate events, and bespoke celebrations across Rajasthan & India.",
   phone: "8279088558",
   whatsapp: "+918279088558",
   address: "Shikhargarh, Jodhpur, Rajasthan 342001",

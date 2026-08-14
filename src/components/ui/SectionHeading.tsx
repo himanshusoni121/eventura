@@ -20,14 +20,14 @@ export default function SectionHeading({
   return (
     <motion.div
       variants={fadeInUp}
-      className={cn("mb-12", centered && "text-center flex flex-col items-center", className)}
+      className={cn("mb-6 sm:mb-12", centered && "text-center flex flex-col items-center", className)}
     >
       {subtitle && (
-        <span className="text-[#D4AF37] font-semibold tracking-wider uppercase text-sm mb-2 block">
+        <span className="text-[#D4AF37] font-semibold tracking-wider uppercase text-xs sm:text-sm mb-1.5 sm:mb-2 block">
           {subtitle}
         </span>
       )}
-      <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4">
+      <h2 className="font-heading text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-2.5 sm:mb-4">
         {title}
       </h2>
       <div className={cn("gold-line", centered && "mx-auto")} />

@@ -7,8 +7,8 @@ import BackToTop from "@/components/ui/BackToTop";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 
 export const metadata = {
-  title: "Plan Event & Get Quote | Eventura",
-  description: "Plan your dream event with our interactive budget estimator and receive a customized premium proposal.",
+  title: "Plan Event & Get Quote | Eventura Luxury Events Jodhpur",
+  description: "Calculate your event budget and receive a customized luxury proposal from Eventura, Jodhpur's premier event management company and wedding planner.",
 };
 
 export default function PlannerPage() {

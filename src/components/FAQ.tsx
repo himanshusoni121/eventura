@@ -42,24 +42,24 @@ export default function FAQ() {
                 >
                   <button
                     onClick={() => setOpenIndex(isOpen ? null : i)}
-                    className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                    className="w-full flex items-center justify-between p-4 xs:p-5 sm:p-6 text-left focus:outline-none"
                   >
                     <h3 className={cn(
-                      "font-heading font-semibold text-[1.1rem] transition-colors pr-8",
+                      "font-heading font-semibold text-sm xs:text-[1rem] sm:text-[1.1rem] transition-colors pr-6 xs:pr-8",
                       isOpen ? "text-[#D4AF37]" : "text-[var(--text-primary)]"
                     )}>
                       {faq.question}
                     </h3>
                     <div className={cn(
-                      "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300",
+                      "flex-shrink-0 w-6 h-6 xs:w-8 xs:h-8 rounded-full flex items-center justify-center transition-all duration-300",
                       isOpen ? "bg-[#D4AF37]/10 text-[#D4AF37]" : "bg-[var(--glass-border)] text-[var(--text-secondary)]"
                     )}>
-                      <ChevronDown 
-                        size={18} 
+                      <ChevronDown
                         className={cn(
+                          "w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4 sm:h-4",
                           "transition-transform duration-300",
                           isOpen ? "rotate-180" : "rotate-0"
-                        )} 
+                        )}
                       />
                     </div>
                   </button>
@@ -72,8 +72,8 @@ export default function FAQ() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                       >
-                        <div className="p-6 pt-0 text-[var(--text-secondary)] text-sm leading-relaxed border-t border-[var(--glass-border)] mt-2">
-                          <p className="pt-4">{faq.answer}</p>
+                        <div className="p-4 xs:p-5 sm:p-6 pt-0 text-[var(--text-secondary)] text-[11px] xs:text-sm leading-relaxed border-t border-[var(--glass-border)] mt-2">
+                          <p className="pt-3 xs:pt-4">{faq.answer}</p>
                         </div>
                       </motion.div>
                     )}

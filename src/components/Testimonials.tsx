@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "@/hooks";
 import { testimonials } from "@/lib/data";
 import SectionHeading from "./ui/SectionHeading";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
@@ -13,7 +12,6 @@ export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { threshold: 0.1 });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -59,8 +57,8 @@ export default function Testimonials() {
           centered 
         />
 
-        <div className="max-w-4xl mx-auto mt-12 relative">
-          <div className="relative h-[400px] sm:h-[350px] md:h-[300px]">
+        <div className="max-w-4xl mx-auto mt-6 sm:mt-12 relative">
+          <div className="relative min-h-[280px] sm:min-h-[320px] md:min-h-[300px] w-full flex items-center justify-center">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={currentIndex}
@@ -70,25 +68,25 @@ export default function Testimonials() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="absolute inset-0"
+                className="w-full"
               >
-                <div className="glass-card gradient-border p-8 md:p-12 h-full flex flex-col items-center text-center">
-                  <div className="text-6xl font-heading text-gold-gradient leading-none mb-4 absolute top-6 left-8 opacity-20">
+                <div className="glass-card gradient-border p-5 sm:p-8 md:p-12 h-full flex flex-col items-center text-center relative">
+                  <div className="text-4xl sm:text-6xl font-heading text-gold-gradient leading-none mb-2 sm:mb-4 absolute top-3 left-4 sm:top-6 sm:left-8 opacity-20">
                     &ldquo;
                   </div>
                   
-                  <div className="flex gap-1 mb-6 text-[#D4AF37]">
+                  <div className="flex gap-1 mb-3 sm:mb-6 text-[#D4AF37]">
                     {[...Array(currentTestimonial.rating)].map((_, i) => (
-                      <Star key={i} size={18} fill="currentColor" />
+                      <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" />
                     ))}
                   </div>
                   
-                  <p className="text-lg md:text-xl font-body italic text-[var(--text-primary)] mb-8 flex-grow flex items-center">
-                    "{currentTestimonial.quote}"
+                  <p className="text-sm sm:text-lg md:text-xl font-body italic text-[var(--text-primary)] mb-6 sm:mb-8 flex-grow flex items-center leading-relaxed max-w-2xl">
+                    &quot;{currentTestimonial.quote}&quot;
                   </p>
                   
-                  <div className="flex items-center gap-4 mt-auto">
-                    <div className="w-12 h-12 rounded-full overflow-hidden relative">
+                  <div className="flex items-center gap-3 sm:gap-4 mt-auto">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden relative shrink-0 border border-[#D4AF37]/30">
                       <Image 
                         src={currentTestimonial.image} 
                         alt={currentTestimonial.name} 
@@ -98,8 +96,8 @@ export default function Testimonials() {
                       />
                     </div>
                     <div className="text-left">
-                      <h4 className="font-heading font-bold text-[var(--text-primary)]">{currentTestimonial.name}</h4>
-                      <p className="text-sm text-[var(--text-muted)]">{currentTestimonial.role}</p>
+                      <h4 className="font-heading font-bold text-xs sm:text-base text-[var(--text-primary)]">{currentTestimonial.name}</h4>
+                      <p className="text-xs sm:text-sm text-[var(--text-muted)]">{currentTestimonial.role}</p>
                     </div>
                   </div>
                 </div>
@@ -108,12 +106,13 @@ export default function Testimonials() {
           </div>
 
           {/* Controls */}
-          <div className="flex items-center justify-center gap-6 mt-8">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8">
             <button 
               onClick={handlePrev}
+              aria-label="Previous testimonial"
               className="w-10 h-10 rounded-full border border-[var(--glass-border)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all z-10"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             
             <div className="flex gap-2 z-10">
@@ -125,8 +124,8 @@ export default function Testimonials() {
                     setCurrentIndex(i);
                   }}
                   className={cn(
-                    "w-2.5 h-2.5 rounded-full transition-all duration-300",
-                    i === currentIndex ? "bg-[#D4AF37] w-8" : "bg-[var(--glass-border)]"
+                    "h-2 rounded-full transition-all duration-300",
+                    i === currentIndex ? "bg-[#D4AF37] w-8" : "bg-[var(--glass-border)] w-2"
                   )}
                   aria-label={`Go to slide ${i + 1}`}
                 />
@@ -135,9 +134,10 @@ export default function Testimonials() {
 
             <button 
               onClick={handleNext}
+              aria-label="Next testimonial"
               className="w-10 h-10 rounded-full border border-[var(--glass-border)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all z-10"
             >
-              <ChevronRight size={20} />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>

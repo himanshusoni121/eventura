@@ -115,20 +115,20 @@ export default function MultiStepForm() {
       <div className="container-custom max-w-4xl mx-auto relative z-10">
         
         {/* Progress Indicator */}
-        <div className="mb-12 relative">
+        <div className="mb-8 sm:mb-12 relative">
           <div className="flex justify-between relative z-10">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
+              <div key={i} className="flex flex-col items-center gap-1.5 sm:gap-2">
                 <div className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500",
+                  "w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-500",
                   step >= i 
                     ? "bg-gradient-to-br from-[#D4AF37] to-[#b8962f] text-[#0B0B0F] shadow-[0_0_15px_rgba(212,175,55,0.4)]" 
                     : "bg-[var(--input-bg)] text-[var(--text-muted)] border border-[var(--glass-border)]"
                 )}>
-                  {step > i ? <CheckCircle2 size={18} /> : i}
+                  {step > i ? <CheckCircle2 className="w-3.5 h-3.5 sm:w-5 sm:h-5" /> : i}
                 </div>
                 <span className={cn(
-                  "text-xs hidden md:block font-semibold transition-colors duration-500",
+                  "text-[10px] sm:text-xs hidden md:block font-semibold transition-colors duration-500",
                   step >= i ? "text-[#D4AF37]" : "text-[var(--text-muted)]"
                 )}>
                   {i === 1 && "Details"}
@@ -141,9 +141,9 @@ export default function MultiStepForm() {
               </div>
             ))}
           </div>
-          <div className="absolute top-5 left-0 w-full h-[2px] bg-[var(--input-bg)] -z-10" />
+          <div className="absolute top-3.5 sm:top-5 left-0 w-full h-[2px] bg-[var(--input-bg)] -z-10" />
           <motion.div 
-            className="absolute top-5 left-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#b8962f] -z-10"
+            className="absolute top-3.5 sm:top-5 left-0 h-[2px] bg-gradient-to-r from-[#D4AF37] to-[#b8962f] -z-10"
             initial={{ width: "0%" }}
             animate={{ width: `${((step - 1) / (totalSteps - 1)) * 100}%` }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -151,13 +151,13 @@ export default function MultiStepForm() {
         </div>
 
         {/* Form Area */}
-        <div className="glass-card gradient-border p-6 md:p-10 min-h-[400px] relative">
+        <div className="glass-card gradient-border p-4 sm:p-6 md:p-10 min-h-[380px] sm:min-h-[400px] relative">
           <form onSubmit={handleSubmit} className="relative z-10 flex flex-col h-full">
             <AnimatePresence mode="wait">
               
               {step === 1 && (
-                <motion.div key="step1" variants={formVariants} initial="hidden" animate="visible" exit="exit" className="flex-grow space-y-6">
-                  <h3 className="font-heading text-2xl font-bold text-[var(--text-primary)] mb-6">1. Event Details</h3>
+                <motion.div key="step1" variants={formVariants} initial="hidden" animate="visible" exit="exit" className="flex-grow space-y-4 sm:space-y-6">
+                  <h3 className="font-heading text-xl sm:text-2xl font-bold text-[var(--text-primary)] mb-4 sm:mb-6">1. Event Details</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs uppercase tracking-wider text-[var(--text-secondary)] font-semibold">Full Name *</label>

@@ -39,7 +39,7 @@ export default function Services() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
           style={{ perspective: 900 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 xs:gap-3 sm:gap-6"
         >
           {services.map((service, i) => {
             const Icon = iconMap[service.icon] || Sparkles;
@@ -54,25 +54,27 @@ export default function Services() {
                   <motion.div
                     variants={cardHover}
                     className={cn(
-                      "themed-card gradient-border h-full p-8 flex flex-col",
+                      "themed-card gradient-border h-full p-3 xs:p-4 sm:p-8 flex flex-col justify-between",
                       "transition-all duration-300"
                     )}
                   >
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#b8962f] flex items-center justify-center mb-6 shadow-lg shadow-[#D4AF37]/20 group-hover:shadow-[#D4AF37]/40 transition-shadow">
-                    <Icon className="text-white" size={24} />
+                  <div>
+                    <div className="w-7 h-7 xs:w-9 xs:h-9 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#b8962f] flex items-center justify-center mb-2 xs:mb-3 sm:mb-6 shadow-lg shadow-[#D4AF37]/20 group-hover:shadow-[#D4AF37]/40 transition-shadow">
+                      <Icon className="text-white w-3.5 h-3.5 xs:w-4.5 xs:h-4.5 sm:w-6 sm:h-6" />
+                    </div>
+                    
+                    <h3 className="font-heading text-xs xs:text-sm sm:text-xl font-bold text-[var(--text-primary)] mb-1 xs:mb-1.5 sm:mb-3 leading-snug">
+                      {service.title}
+                    </h3>
+                    
+                    <p className="text-[var(--text-secondary)] font-body text-[10px] xs:text-xs sm:text-sm leading-tight sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
+                      {service.description}
+                    </p>
                   </div>
-                  
-                  <h3 className="font-heading text-xl font-bold text-[var(--text-primary)] mb-3">
-                    {service.title}
-                  </h3>
-                  
-                  <p className="text-[var(--text-secondary)] font-body text-sm leading-relaxed flex-grow">
-                    {service.description}
-                  </p>
 
-                  <div className="mt-6 flex items-center text-[#D4AF37] text-sm font-semibold group-hover:gap-2 transition-all">
+                  <div className="mt-2.5 xs:mt-3 sm:mt-6 flex items-center text-[#D4AF37] text-[10px] xs:text-xs sm:text-sm font-semibold group-hover:gap-2 transition-all">
                     <span>Learn more</span>
-                    <svg className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   </div>

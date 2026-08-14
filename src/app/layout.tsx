@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
-// @ts-ignore
 import "./globals.css";
-import { siteConfig } from "@/lib/data";
 import Preloader from "@/components/ui/Preloader";
 import JsonLd from "@/components/JsonLd";
 

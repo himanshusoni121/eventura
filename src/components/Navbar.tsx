@@ -45,20 +45,20 @@ export default function Navbar() {
         className={cn(
           "fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-transparent",
           scrolled
-            ? "bg-[var(--nav-bg)] backdrop-blur-xl border-[var(--glass-border)] shadow-sm py-4"
-            : "bg-transparent py-6"
+            ? "bg-[var(--nav-bg)] backdrop-blur-xl border-[var(--glass-border)] shadow-sm py-2 xs:py-2.5 sm:py-3 md:py-4"
+            : "bg-transparent py-2.5 xs:py-3.5 sm:py-5 md:py-6"
         )}
       >
-        <div className="w-full px-2 md:px-6 lg:px-10 flex items-center justify-between">
+        <div className="w-full px-4 sm:px-6 md:px-6 lg:px-10 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/#home" className="relative z-50">
+          <Link href="/#home" className="relative z-50" aria-label="Eventura Home">
             <Image
               src="/images/logo.png"
               alt={siteConfig.name}
               width={180}
               height={60}
               priority
-              className="h-10 sm:h-12 md:h-16 w-auto"
+              className="h-8 xs:h-9 sm:h-11 md:h-14 lg:h-16 w-auto transition-all"
             />
           </Link>
 
@@ -100,9 +100,13 @@ export default function Navbar() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={cn("p-2", mobileMenuOpen || !scrolled ? "text-white" : "text-[var(--text-primary)]")}
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              className={cn(
+                "p-2 rounded-full flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]",
+                mobileMenuOpen || !scrolled ? "text-white bg-white/10" : "text-[var(--text-primary)] bg-[var(--glass-bg)] border border-[var(--glass-border)]"
+              )}
             >
-              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -119,11 +123,11 @@ export default function Navbar() {
             className="fixed inset-0 z-40 bg-[#0B0B0F] flex flex-col justify-center items-center"
           >
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-               <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#D4AF37]/10 rounded-full blur-[100px]" />
-               <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-[#D4AF37]/10 rounded-full blur-[100px]" />
+               <div className="absolute top-1/4 left-1/4 w-48 h-48 xs:w-64 xs:h-64 bg-[#D4AF37]/10 rounded-full blur-[80px] xs:blur-[100px]" />
+               <div className="absolute bottom-1/4 right-1/4 w-48 h-48 xs:w-64 xs:h-64 bg-[#D4AF37]/10 rounded-full blur-[80px] xs:blur-[100px]" />
             </div>
             
-            <div className="flex flex-col items-center gap-8 z-10">
+            <div className="flex flex-col items-center gap-6 xs:gap-8 z-10">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.label}
@@ -134,7 +138,7 @@ export default function Navbar() {
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={cn(
-                      "font-heading text-3xl md:text-4xl hover:text-[#D4AF37] transition-colors",
+                      "font-heading text-2xl xs:text-3xl md:text-4xl hover:text-[#D4AF37] transition-colors",
                       isActive(link.href) ? "text-[#D4AF37]" : "text-white"
                     )}
                   >

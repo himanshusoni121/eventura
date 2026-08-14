@@ -52,6 +52,11 @@ export default function Tilt3DCard({
     y.set(0.5);
   };
 
+  const glareBackground = useTransform(
+    [glareX, glareY],
+    ([gx, gy]) => `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.14), transparent 55%)`
+  );
+
   return (
     <motion.div
       ref={ref}
@@ -74,10 +79,7 @@ export default function Tilt3DCard({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-[inherit]"
           style={{
-            background: useTransform(
-              [glareX, glareY],
-              ([gx, gy]) => `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.14), transparent 55%)`
-            ) as unknown as string,
+            background: glareBackground as unknown as string,
           }}
           animate={{ opacity: hovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}

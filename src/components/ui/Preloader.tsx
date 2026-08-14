@@ -16,6 +16,7 @@ export default function Preloader() {
 
   // Step 1: mark mounted, and resolve real phase — client only.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const alreadyLoaded = sessionStorage.getItem(STORAGE_KEY);
     if (alreadyLoaded) {

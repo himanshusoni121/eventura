@@ -6,7 +6,9 @@ import { useInView } from "@/hooks";
 import { useCounter } from "@/hooks";
 import { stats } from "@/lib/data";
 
-function StatItem({ stat, index, inView }: { stat: any, index: number, inView: boolean }) {
+type StatData = { value: number; suffix: string; label: string };
+
+function StatItem({ stat, index, inView }: { stat: StatData, index: number, inView: boolean }) {
   const count = useCounter(stat.value, 2500, inView);
   
   return (
@@ -14,13 +16,13 @@ function StatItem({ stat, index, inView }: { stat: any, index: number, inView: b
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="flex flex-col items-center flex-1 min-w-[150px] p-4 relative"
+      className="flex flex-col items-center flex-1 min-w-[120px] sm:min-w-[150px] p-2.5 sm:p-4 relative"
     >
-      <div className="flex items-center text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mb-2">
+      <div className="flex items-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mb-1 sm:mb-2">
         <span>{count}</span>
         <span className="text-[#D4AF37] ml-1">{stat.suffix}</span>
       </div>
-      <span className="text-gray-400 text-sm md:text-base tracking-widest uppercase font-semibold text-center">
+      <span className="text-gray-400 text-xs md:text-base tracking-widest uppercase font-semibold text-center">
         {stat.label}
       </span>
       
@@ -40,7 +42,7 @@ export default function Statistics() {
     <section 
       id="statistics" 
       ref={ref} 
-      className="py-24 relative bg-[#0B0B0F] overflow-hidden"
+      className="py-8 xs:py-10 sm:py-16 md:py-24 relative bg-[#0B0B0F] overflow-hidden"
     >
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D4AF37]/10 via-transparent to-transparent opacity-50" />
@@ -48,7 +50,7 @@ export default function Statistics() {
       <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
       
       <div className="container-custom relative z-10">
-        <div className="flex flex-wrap justify-center md:justify-between items-center gap-8">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 sm:gap-8">
           {stats.map((stat, i) => (
             <StatItem key={i} stat={stat} index={i} inView={inView} />
           ))}

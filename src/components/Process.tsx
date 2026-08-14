@@ -30,7 +30,7 @@ export default function Process() {
           className="text-white"
         />
 
-        <div className="mt-20">
+        <div className="mt-8 sm:mt-16 md:mt-20">
           {/* Desktop Horizontal Timeline */}
           <div className="hidden lg:block relative">
             {/* Connecting Line */}
@@ -63,9 +63,9 @@ export default function Process() {
           </div>
 
           {/* Mobile/Tablet Vertical Timeline */}
-          <div className="lg:hidden relative pl-6 space-y-12">
+          <div className="lg:hidden relative pl-4 sm:pl-6 space-y-6 sm:space-y-12">
             {/* Connecting Line */}
-            <div className="absolute top-0 bottom-0 left-[23px] w-[2px] bg-gradient-to-b from-[#D4AF37] to-transparent opacity-30" />
+            <div className="absolute top-0 bottom-0 left-[18px] sm:left-[23px] w-[2px] bg-gradient-to-b from-[#D4AF37] to-transparent opacity-30" />
             
             <motion.div
               variants={staggerContainer3D}
@@ -76,17 +76,17 @@ export default function Process() {
               {processSteps.map((step, i) => {
                 const Icon = iconMap[step.icon] || ClipboardList;
                 return (
-                  <motion.div key={i} variants={reveal3D} className="relative mb-12 last:mb-0 pl-10">
-                    <div className="absolute -left-6 top-0 w-12 h-12 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#b8962f] flex items-center justify-center font-heading font-bold text-lg text-[#0B0B0F] z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                  <motion.div key={i} variants={reveal3D} className="relative mb-6 sm:mb-12 last:mb-0 pl-8 sm:pl-10">
+                    <div className="absolute -left-4 sm:-left-6 top-0 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#b8962f] flex items-center justify-center font-heading font-bold text-sm sm:text-lg text-[#0B0B0F] z-10 shadow-[0_0_15px_rgba(212,175,55,0.4)]">
                       {step.step}
                     </div>
                     
-                    <div className="bg-[#1a1a24] border border-[#2a2a35] rounded-xl p-6 relative">
-                      <div className="flex items-center gap-4 mb-3">
-                        <Icon className="text-[#D4AF37]" size={24} />
-                        <h3 className="font-heading font-bold text-xl">{step.title}</h3>
+                    <div className="bg-[#1a1a24] border border-[#2a2a35] rounded-xl p-4 sm:p-6 relative">
+                      <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3">
+                        <Icon className="text-[#D4AF37] w-5 h-5 sm:w-6 sm:h-6" />
+                        <h3 className="font-heading font-bold text-base sm:text-xl">{step.title}</h3>
                       </div>
-                      <p className="text-gray-400 text-sm leading-relaxed">{step.description}</p>
+                      <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{step.description}</p>
                     </div>
                   </motion.div>
                 );

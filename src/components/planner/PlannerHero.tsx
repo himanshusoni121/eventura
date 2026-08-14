@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeIn, fadeInUp } from "@/lib/animations";
+import { fadeInUp } from "@/lib/animations";
 
 export default function PlannerHero() {
   return (
@@ -14,14 +14,14 @@ export default function PlannerHero() {
           animate="visible"
           variants={fadeInUp}
         >
-          <span className="inline-block py-1 px-3 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-sm font-semibold tracking-wider uppercase mb-6 border border-[#D4AF37]/20">
+          <span className="inline-block py-1 px-3 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-xs sm:text-sm font-semibold tracking-wider uppercase mb-4 sm:mb-6 border border-[#D4AF37]/20">
             Event Estimator
           </span>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="font-heading text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
             Plan Your <span className="text-gold-gradient">Event Budget</span>
           </h1>
-          <p className="text-lg text-gray-400 font-body max-w-2xl mx-auto">
-            Tell us about your event and estimated budget. We'll prepare a customized proposal that matches your vision, requirements, and expectations.
+          <p className="text-sm sm:text-lg text-gray-400 font-body max-w-2xl mx-auto leading-relaxed">
+            Tell us about your event and estimated budget. We&apos;ll prepare a customized luxury proposal that matches your vision and expectations.
           </p>
         </motion.div>
       </div>
