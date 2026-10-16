@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eventura
+
+A luxury event management website with a headless CMS built on Cloudflare Pages Functions and R2 storage.
+
+## Project Structure
+
+```
+eventura-main/
+├── backend/                # Cloudflare Workers backend
+│   ├── functions/          # API endpoints (login, upload, manifest)
+│   ├── wrangler.toml       # Cloudflare configuration
+│   └── package.json        # Backend dependencies
+├── frontend/               # Next.js frontend
+│   ├── src/
+│   │   ├── app/            # Pages and layouts
+│   │   ├── components/     # React components
+│   │   └── lib/            # Utilities and data
+│   ├── public/             # Static assets
+│   └── package.json        # Frontend dependencies
+└── package.json            # Root mono-repo scripts
+```
+
+## Features
+
+- **Headless CMS**: Manage all website content through admin panel
+- **Real-time Updates**: Publish changes without redeployment
+- **Cloud Storage**: Images stored in Cloudflare R2
+- **Secure Auth**: JWT-based authentication with timing-safe password comparison
+- **Draft/Publish**: Save drafts before publishing to live site
+- **Mobile Responsive**: Fully responsive design with touch-friendly admin
 
 ## Getting Started
 
-First, run the development server:
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+### Deploy
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run deploy
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This builds the frontend and deploys to Cloudflare Pages with the backend functions.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentation
 
-## Deploy on Vercel
+- [Admin Setup Guide](ADMIN_SETUP.md) - Configure Cloudflare R2 and environment variables
+- [Deployment Guide](DEPLOYMENT.md) - Full deployment and content management instructions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Admin Panel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Access the admin panel at `/admin` after deployment. You'll need to set up:
+
+1. **R2 Bucket**: Create `eventura-cms` bucket in Cloudflare dashboard
+2. **Environment Variables**: Set `ADMIN_PASSWORD` and `JWT_SECRET` in Cloudflare Pages settings
+3. **R2 Binding**: Bind the bucket to `EVENTURA_R2` in Pages settings
+
+See [ADMIN_SETUP.md](ADMIN_SETUP.md) for detailed instructions.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS, Framer Motion
+- **Backend**: Cloudflare Pages Functions (Workers)
+- **Storage**: Cloudflare R2
+- **Auth**: JWT with Web Crypto API
+- **Deployment**: Cloudflare Pages
+
+## License
+
+MIT

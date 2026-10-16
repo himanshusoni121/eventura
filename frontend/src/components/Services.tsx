@@ -1,27 +1,42 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { staggerContainer3D, reveal3D, cardHover } from "@/lib/animations";
-import { services } from "@/lib/data";
+import { services as staticServices } from "@/lib/data";
 import SectionHeading from "./ui/SectionHeading";
 import SectionPattern from "./ui/SectionPattern";
 import Tilt3DCard from "./ui/Tilt3DCard";
-import { 
-  Heart, Building2, Cake, GraduationCap, Palette, 
-  Sparkles, Music, Camera, Video, UtensilsCrossed, 
-  PartyPopper, Clapperboard, LucideIcon 
+import {
+  Heart, Building2, Cake, GraduationCap, Palette,
+  Sparkles, Music, Camera, Video, UtensilsCrossed,
+  PartyPopper, Clapperboard, LucideIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, LucideIcon> = {
-  Heart, Building2, Cake, GraduationCap, Palette, 
-  Sparkles, Music, Camera, Video, UtensilsCrossed, 
+  Heart, Building2, Cake, GraduationCap, Palette,
+  Sparkles, Music, Camera, Video, UtensilsCrossed,
   PartyPopper, Clapperboard
 };
 
 export default function Services() {
   const ref = useRef<HTMLElement>(null);
+  const [services, setServices] = useState(staticServices);
+
+  // Fetch live services from R2 manifest on mount.
+  useEffect(() => {
+    fetch("/api/manifest/services")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { items?: typeof staticServices } | null) => {
+        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
+          setServices(data.items);
+        }
+      })
+      .catch(() => {
+        // Silently keep static fallback
+      });
+  }, []);
 
   return (
     <section id="services" ref={ref} className="relative overflow-hidden section-padding bg-[var(--bg-secondary)]">

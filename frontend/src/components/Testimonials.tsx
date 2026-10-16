@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { testimonials } from "@/lib/data";
+import { testimonials as staticTestimonials } from "@/lib/data";
 import SectionHeading from "./ui/SectionHeading";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,22 @@ import { cn } from "@/lib/utils";
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [testimonials, setTestimonials] = useState(staticTestimonials);
   const ref = useRef<HTMLElement>(null);
+
+  // Fetch live testimonials from R2 manifest on mount.
+  useEffect(() => {
+    fetch("/api/manifest/testimonials")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { items?: typeof staticTestimonials } | null) => {
+        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
+          setTestimonials(data.items);
+        }
+      })
+      .catch(() => {
+        // Silently keep static fallback
+      });
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -19,7 +34,7 @@ export default function Testimonials() {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials.length]);
 
   const handleNext = () => {
     setDirection(1);

@@ -43,9 +43,9 @@ Open http://localhost:3000. Edits to files are reflected immediately. Press `Ctr
 ## 4. Making changes
 
 ### 4.1 Text, phone number, services, portfolio, testimonials, FAQs
-Almost all site content is in **`src/lib/data.ts`**. Edit the values there:
+Almost all site content is in **`frontend/src/lib/data.ts`**. Edit the values there:
 
-| What you want to change | Variable in `src/lib/data.ts` |
+| What you want to change | Variable in `frontend/src/lib/data.ts` |
 | --- | --- |
 | Business name, tagline, phone, WhatsApp, address, office hours, social links | `siteConfig` |
 | Menu items | `navLinks` |
@@ -70,15 +70,15 @@ export const siteConfig = {
 ```
 
 ### 4.2 Images
-Put image files in **`public/images/`**, then reference them by path, e.g. `/images/my-photo.jpg`.
+Put image files in **`frontend/public/images/`**, then reference them by path, e.g. `/images/my-photo.jpg`.
 Keep files small (under ~500 KB each) so pages load fast; use `.jpg` for photos and `.png` for logos.
 
 ### 4.3 Page layout / design
-- Sections of the home page: `src/components/` (`Hero.tsx`, `About.tsx`, `Services.tsx`, `Portfolio.tsx`, `Testimonials.tsx`, `FAQ.tsx`, `Contact.tsx`, `Footer.tsx`, …)
-- Our Work page: `src/app/our-work/page.tsx` + `src/components/our-work/`
-- Planner page: `src/app/planner/page.tsx` + `src/components/planner/MultiStepForm.tsx`
-- Colours, fonts, global styles: `src/app/globals.css`
-- Page title / SEO description: `src/app/layout.tsx`
+- Sections of the home page: `frontend/src/components/` (`Hero.tsx`, `About.tsx`, `Services.tsx`, `Portfolio.tsx`, `Testimonials.tsx`, `FAQ.tsx`, `Contact.tsx`, `Footer.tsx`, …)
+- Our Work page: `frontend/src/app/our-work/page.tsx` + `frontend/src/components/our-work/`
+- Planner page: `frontend/src/app/planner/page.tsx` + `frontend/src/components/planner/MultiStepForm.tsx`
+- Colours, fonts, global styles: `frontend/src/app/globals.css`
+- Page title / SEO description: `frontend/src/app/layout.tsx`
 
 ### 4.4 Check before publishing
 
@@ -109,14 +109,14 @@ git push
 ### 6.1 Visitor traffic (Cloudflare Web Analytics — free, no cookie banner needed)
 1. Go to https://dash.cloudflare.com → **Analytics & Logs** → **Web Analytics**.
 2. Click **Add a site**, enter `www.e-ventura.com`, and copy the `<script>` snippet it gives you.
-3. Paste that snippet at the end of the `<body>` in `src/app/layout.tsx`, then run `npm run deploy`.
+3. Paste that snippet at the end of the `<body>` in `frontend/src/app/layout.tsx`, then run `npm run deploy`.
 4. Within a few minutes the dashboard shows page views, visitors, top pages, countries, and referrers.
 
 You can also see request counts and bandwidth without any setup: **Workers & Pages → eventura → Metrics**.
 
 ### 6.2 Google Analytics (optional, more detailed)
 1. Create a property at https://analytics.google.com and copy the Measurement ID (`G-XXXXXXX`).
-2. Add the gtag snippet to `src/app/layout.tsx`, then `npm run deploy`.
+2. Add the gtag snippet to `frontend/src/app/layout.tsx`, then `npm run deploy`.
 
 ### 6.3 Enquiries from the site
 Both the contact form and the 6-step planner send their answers to **WhatsApp on +91 8279088558** — there is no database, so your enquiry history is your WhatsApp chat list. To collect them elsewhere (email, Google Sheet, CRM), the forms need to be pointed at a form service; that is a code change.

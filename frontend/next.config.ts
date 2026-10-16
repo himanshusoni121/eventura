@@ -13,10 +13,6 @@ const nextConfig: NextConfig = {
 
   trailingSlash: true,
 
-  turbopack: {
-    root: projectRoot,
-  },
-
   eslint: {
     ignoreDuringBuilds: true,
   },

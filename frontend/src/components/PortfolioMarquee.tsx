@@ -1,13 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { marqueeItemsList } from "@/lib/data";
+import { marqueeItemsList as staticMarqueeItems } from "@/lib/data";
 import { X, ZoomIn, Sparkles } from "lucide-react";
 
 export default function PortfolioMarquee() {
-  const [selectedItem, setSelectedItem] = useState<(typeof marqueeItemsList)[0] | null>(null);
+  type MarqueeItem = typeof staticMarqueeItems[0];
+  const [selectedItem, setSelectedItem] = useState<MarqueeItem | null>(null);
+  const [marqueeItemsList, setMarqueeItemsList] = useState<MarqueeItem[]>(staticMarqueeItems);
+
+  // Fetch live content from R2 manifest on mount.
+  useEffect(() => {
+    fetch("/api/manifest/marquee")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { items?: MarqueeItem[] } | null) => {
+        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
+          setMarqueeItemsList(data.items);
+        }
+      })
+      .catch(() => {
+        // Silently keep static fallback
+      });
+  }, []);
 
   // Duplicate items to ensure smooth 100% seamless marquee loop
   const marqueeItems = [...marqueeItemsList, ...marqueeItemsList];

@@ -1,16 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks";
 import { useCounter } from "@/hooks";
-import { stats } from "@/lib/data";
+import { stats as staticStats } from "@/lib/data";
 
 type StatData = { value: number; suffix: string; label: string };
 
 function StatItem({ stat, index, inView }: { stat: StatData, index: number, inView: boolean }) {
   const count = useCounter(stat.value, 2500, inView);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -25,9 +25,9 @@ function StatItem({ stat, index, inView }: { stat: StatData, index: number, inVi
       <span className="text-gray-400 text-xs md:text-base tracking-widest uppercase font-semibold text-center">
         {stat.label}
       </span>
-      
+
       {/* Decorative dot - hidden on last item or mobile */}
-      {index < stats.length - 1 && (
+      {index < staticStats.length - 1 && (
         <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#D4AF37]/50" />
       )}
     </motion.div>
@@ -37,18 +37,33 @@ function StatItem({ stat, index, inView }: { stat: StatData, index: number, inVi
 export default function Statistics() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { threshold: 0.5 });
+  const [stats, setStats] = useState(staticStats);
+
+  // Fetch live statistics from R2 manifest on mount.
+  useEffect(() => {
+    fetch("/api/manifest/statistics")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { items?: typeof staticStats } | null) => {
+        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
+          setStats(data.items);
+        }
+      })
+      .catch(() => {
+        // Silently keep static fallback
+      });
+  }, []);
 
   return (
-    <section 
-      id="statistics" 
-      ref={ref} 
+    <section
+      id="statistics"
+      ref={ref}
       className="py-8 xs:py-10 sm:py-16 md:py-24 relative bg-[#0B0B0F] overflow-hidden"
     >
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#D4AF37]/10 via-transparent to-transparent opacity-50" />
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
       <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent" />
-      
+
       <div className="container-custom relative z-10">
         <div className="flex flex-wrap justify-center md:justify-between items-center gap-4 sm:gap-8">
           {stats.map((stat, i) => (

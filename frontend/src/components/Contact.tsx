@@ -1,23 +1,36 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "@/hooks";
 import { fadeInLeft, fadeInRight } from "@/lib/animations";
-import { siteConfig, eventTypes } from "@/lib/data";
+import { siteConfig as staticSiteConfig, eventTypes } from "@/lib/data";
 import SectionHeading from "./ui/SectionHeading";
 import { Phone, MessageCircle, MapPin, Clock, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [siteConfig, setSiteConfig] = useState(staticSiteConfig);
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { threshold: 0.1 });
+
+  // Fetch live contact info from R2 manifest on mount.
+  useEffect(() => {
+    fetch("/api/manifest/contact")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data) setSiteConfig({ ...staticSiteConfig, ...(data as typeof staticSiteConfig) });
+      })
+      .catch(() => {
+        // Silently keep static fallback
+      });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const phone = formData.get("phone") as string;
@@ -27,16 +40,16 @@ export default function Contact() {
     const message = formData.get("message") as string;
 
     const whatsappMessage = `*New Inquiry from ${name}*\n\n*Phone:* ${phone}\n*Date:* ${date || 'Not specified'}\n*Event Type:* ${eventType || 'Not specified'}\n*Guests:* ${guests || 'Not specified'}\n\n*Message:*\n${message}`;
-    
+
     const encodedMessage = encodeURIComponent(whatsappMessage);
     const whatsappUrl = `https://wa.me/${siteConfig.whatsapp.replace(/[^0-9]/g, '')}?text=${encodedMessage}`;
-    
+
     window.open(whatsappUrl, '_blank');
-    
+
     setIsSubmitting(false);
     setIsSuccess(true);
     e.currentTarget.reset();
-    
+
     // Reset after 5 seconds
     setTimeout(() => {
       setIsSuccess(false);

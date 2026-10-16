@@ -40,3 +40,25 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .open-next
+
+
+# Local secrets
+backend/.dev.vars
+.dev.vars
+.env
+.env.*
+!.env.example
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+backend/node_modules/
+node_modules/
+.dev.vars
+backend/.dev.vars
+
+backend/.wrangler/
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+backend/node_modules/
+node_modules/

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { portfolioItems, portfolioCategories, PortfolioCategory, PortfolioItem } from "@/lib/data";
+import { portfolioItems as staticPortfolioItems, portfolioCategories, PortfolioCategory, PortfolioItem } from "@/lib/data";
 import SectionHeading from "./ui/SectionHeading";
 import SectionPattern from "./ui/SectionPattern";
 import Tilt3DCard from "./ui/Tilt3DCard";
@@ -13,7 +13,23 @@ import { cn } from "@/lib/utils";
 export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState<PortfolioCategory>("all");
   const [lightboxItem, setLightboxItem] = useState<PortfolioItem | null>(null);
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>(staticPortfolioItems);
   const ref = useRef<HTMLElement>(null);
+
+  // Fetch live content from R2 manifest on mount.
+  // Falls back to static data if the fetch fails or no manifest is published yet.
+  useEffect(() => {
+    fetch("/api/manifest/portfolio")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { items?: PortfolioItem[] } | null) => {
+        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
+          setPortfolioItems(data.items);
+        }
+      })
+      .catch(() => {
+        // Silently keep static fallback
+      });
+  }, []);
 
   const filteredItems = portfolioItems.filter(
     (item) => activeCategory === "all" || item.category === activeCategory

@@ -1,0 +1,20 @@
+name = "eventura"
+pages_build_output_dir = "../frontend/out"
+compatibility_date = "2024-09-23"
+
+# ── R2 bucket binding ─────────────────────────────────────────────────────────
+# Create this bucket in the Cloudflare dashboard before deploying.
+# Dashboard → R2 Object Storage → Create bucket → name: eventura-cms
+[[r2_buckets]]
+binding = "EVENTURA_R2"
+bucket_name = "eventura-cms"
+
+# ── Environment secrets ───────────────────────────────────────────────────────
+# Set these via: Cloudflare Dashboard → Pages → eventura → Settings → Environment Variables
+# ADMIN_PASSWORD  — your chosen admin login password
+# JWT_SECRET      — 32+ random bytes (hex string), used to sign tokens
+#
+# For local dev only (never commit real values):
+# [vars]
+# ADMIN_PASSWORD = "localdevpassword"
+# JWT_SECRET     = "localdevjwtsecretxxxxxxxxxxxxxxxx"

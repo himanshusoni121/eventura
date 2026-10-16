@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +12,28 @@ import { siteConfig } from "@/lib/data";
 export default function Hero() {
   const mousePosition = useMousePosition();
   const sectionRef = useRef<HTMLElement>(null);
+  const [heroImage, setHeroImage] = useState("/images/home.png");
+  const [siteData, setSiteData] = useState({ tagline: siteConfig.tagline, description: siteConfig.description });
+
+  // Fetch live hero image and site data from R2 manifests on mount.
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/manifest/hero").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/manifest/site").then((r) => (r.ok ? r.json() : null)),
+    ])
+      .then(([heroData, siteManifest]) => {
+        if (heroData?.heroImage) setHeroImage(heroData.heroImage);
+        if (siteManifest?.tagline || siteManifest?.description) {
+          setSiteData({
+            tagline: siteManifest.tagline || siteConfig.tagline,
+            description: siteManifest.description || siteConfig.description,
+          });
+        }
+      })
+      .catch(() => {
+        // Keep static fallback
+      });
+  }, []);
 
   // Scroll-linked 3D depth: background pulls back and content tilts away
   // as the user scrolls past the hero — a real perspective effect, not a toy.
@@ -36,14 +58,14 @@ export default function Hero() {
     { id: 7, size: 5, top: "90%", left: "30%", delay: 1.8 },
   ];
 
-  const headlineWords = siteConfig.tagline.split(" ");
+  const headlineWords = siteData.tagline.split(" ");
 
   return (
     <section id="home" ref={sectionRef} className="relative min-h-[85vh] sm:min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-24 sm:pt-28 md:pt-24 pb-12 sm:pb-16 md:pb-0 px-4 sm:px-6 md:px-12" style={{ perspective: 1000 }}>
       {/* Background Image */}
       <motion.div className="absolute inset-0 z-0 bg-[#0B0B0F]" style={{ scale: bgScale, y: bgY }}>
         <Image
-          src="/images/home.png"
+          src={heroImage}
           alt="Luxury Event"
           fill
           sizes="100vw"
@@ -113,7 +135,7 @@ export default function Hero() {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="text-xs sm:text-base md:text-xl text-gray-300 max-w-2xl mx-auto mb-6 sm:mb-10 font-body px-2 leading-relaxed"
         >
-          {siteConfig.description}
+          {siteData.description}
         </motion.p>
 
         <motion.div
