@@ -5,9 +5,9 @@ compatibility_date = "2024-09-23"
 # ── R2 bucket binding ─────────────────────────────────────────────────────────
 # Create this bucket in the Cloudflare dashboard before deploying.
 # Dashboard → R2 Object Storage → Create bucket → name: eventura-cms
-[[r2_buckets]]
-binding = "EVENTURA_R2"
-bucket_name = "eventura-cms"
+#[[r2_buckets]]
+#binding = "EVENTURA_R2"
+#bucket_name = "eventura-cms"
 
 # ── Environment secrets ───────────────────────────────────────────────────────
 # Set these via: Cloudflare Dashboard → Pages → eventura → Settings → Environment Variables
