@@ -18,8 +18,13 @@ interface R2Bucket {
   delete(key: string | string[]): Promise<void>;
 }
 
+interface KVNamespace {
+  get(key: string, options?: { type?: "text" | "json" | "arrayBuffer" | "stream" }): Promise<any>;
+}
+
 interface Env {
-  EVENTURA_R2: R2Bucket;
+  EVENTURA_R2?: R2Bucket;
+  EVENTURA_KV?: KVNamespace;
   ADMIN_PASSWORD: string;
   JWT_SECRET: string;
 }
@@ -47,20 +52,41 @@ export async function onRequestGet({ request, env }: PagesContext): Promise<Resp
     return new Response("Forbidden", { status: 403 });
   }
 
-  const obj = await env.EVENTURA_R2.get(key);
-  if (!obj) {
-    return new Response("Image not found", { status: 404 });
+  if (env.EVENTURA_KV) {
+    const data = await env.EVENTURA_KV.get(key, { type: "arrayBuffer" });
+    if (!data) {
+      return new Response("Image not found", { status: 404 });
+    }
+    const ext = key.split(".").pop()?.toLowerCase();
+    const contentType = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
+    return new Response(data, {
+      status: 200,
+      headers: new Headers({
+        "Content-Type": contentType,
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Access-Control-Allow-Origin": "*",
+      }),
+    });
   }
 
-  const contentType = obj.httpMetadata?.contentType ?? "image/jpeg";
+  if (env.EVENTURA_R2) {
+    const obj = await env.EVENTURA_R2.get(key);
+    if (!obj) {
+      return new Response("Image not found", { status: 404 });
+    }
 
-  return new Response(obj.body, {
-    status: 200,
-    headers: new Headers({
-      "Content-Type": contentType,
-      // Cache aggressively at the CDN layer — keys are UUIDs so they're immutable
-      "Cache-Control": "public, max-age=31536000, immutable",
-      "Access-Control-Allow-Origin": "*",
-    }),
-  });
+    const contentType = obj.httpMetadata?.contentType ?? "image/jpeg";
+
+    return new Response(obj.body, {
+      status: 200,
+      headers: new Headers({
+        "Content-Type": contentType,
+        // Cache aggressively at the CDN layer — keys are UUIDs so they're immutable
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Access-Control-Allow-Origin": "*",
+      }),
+    });
+  }
+
+  return new Response("Storage not configured", { status: 503 });
 }

@@ -1,3 +1,9 @@
 name = "eventura"
 pages_build_output_dir = "./frontend/out"
 compatibility_date = "2024-09-23"
+
+# ── Cloudflare KV Namespace ───────────────────────────────────────────────────
+# Replaces R2 storage with free Cloudflare KV
+[[kv_namespaces]]
+binding = "EVENTURA_KV"
+id = "8e4c8ec64aff49458eadad8c49bf7dc2"

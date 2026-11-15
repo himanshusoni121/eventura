@@ -1,5 +1,5 @@
 name = "eventura"
-pages_build_output_dir = "../frontend/out"
+pages_build_output_dir = "./frontend/out"
 compatibility_date = "2024-09-23"
 
 # ── R2 bucket binding ─────────────────────────────────────────────────────────

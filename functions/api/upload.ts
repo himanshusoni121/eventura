@@ -16,8 +16,13 @@ interface R2Bucket {
   delete(key: string | string[]): Promise<void>;
 }
 
+interface KVNamespace {
+  put(key: string, value: ArrayBuffer | string): Promise<void>;
+}
+
 interface Env {
-  EVENTURA_R2: R2Bucket;
+  EVENTURA_R2?: R2Bucket;
+  EVENTURA_KV?: KVNamespace;
   ADMIN_PASSWORD: string;
   JWT_SECRET: string;
 }
@@ -96,9 +101,17 @@ export async function onRequestPost({ request, env }: PagesContext): Promise<Res
   const key = `images/${safeSection}/${id}.${ext}`;
 
   const buffer = await file.arrayBuffer();
-  await env.EVENTURA_R2.put(key, buffer, {
-    httpMetadata: { contentType: file.type },
-  });
+  if (env.EVENTURA_KV) {
+    await env.EVENTURA_KV.put(key, buffer);
+  } else if (env.EVENTURA_R2) {
+    await env.EVENTURA_R2.put(key, buffer, {
+      httpMetadata: { contentType: file.type },
+    });
+  } else {
+    return new Response(JSON.stringify({ error: "Storage not configured" }), {
+      status: 503, headers: jsonHeaders(),
+    });
+  }
 
   // Return the key and the proxy URL
   const url = `/api/image?key=${encodeURIComponent(key)}`;

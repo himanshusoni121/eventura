@@ -7,7 +7,8 @@
 import { signJWT, jsonHeaders, corsPreflightResponse } from "./_lib/auth";
 
 interface Env {
-  EVENTURA_R2: R2Bucket;
+  EVENTURA_R2?: R2Bucket;
+  EVENTURA_KV?: any;
   ADMIN_PASSWORD: string;
   JWT_SECRET: string;
 }

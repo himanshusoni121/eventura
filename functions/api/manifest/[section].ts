@@ -21,8 +21,15 @@ interface R2Bucket {
   delete(key: string | string[]): Promise<void>;
 }
 
+interface KVNamespace {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string): Promise<void>;
+  delete(key: string): Promise<void>;
+}
+
 interface Env {
-  EVENTURA_R2: R2Bucket;
+  EVENTURA_R2?: R2Bucket;
+  EVENTURA_KV?: KVNamespace;
   ADMIN_PASSWORD: string;
   JWT_SECRET: string;
 }
@@ -41,6 +48,39 @@ function publishedKey(section: Section) {
 }
 function draftKey(section: Section) {
   return `manifests/${section}.draft.json`;
+}
+
+async function getStorageData(env: Env, key: string): Promise<string | null> {
+  if (env.EVENTURA_KV) {
+    return await env.EVENTURA_KV.get(key);
+  }
+  if (env.EVENTURA_R2) {
+    const obj = await env.EVENTURA_R2.get(key);
+    return obj ? await obj.text() : null;
+  }
+  return null;
+}
+
+async function putStorageData(env: Env, key: string, data: string): Promise<void> {
+  if (env.EVENTURA_KV) {
+    await env.EVENTURA_KV.put(key, data);
+    return;
+  }
+  if (env.EVENTURA_R2) {
+    await env.EVENTURA_R2.put(key, data, {
+      httpMetadata: { contentType: "application/json" },
+    });
+  }
+}
+
+async function deleteStorageData(env: Env, keys: string[]): Promise<void> {
+  if (env.EVENTURA_KV) {
+    await Promise.all(keys.map(k => env.EVENTURA_KV!.delete(k)));
+    return;
+  }
+  if (env.EVENTURA_R2) {
+    await env.EVENTURA_R2.delete(keys);
+  }
 }
 
 function isValidSection(s: unknown): s is Section {
@@ -74,24 +114,24 @@ export async function onRequestGet({ request, env, params }: PagesContext): Prom
     if (authError) return authError;
 
     // Return draft, fall back to published, fall back to empty
-    const obj =
-      (await env.EVENTURA_R2.get(draftKey(section))) ||
-      (await env.EVENTURA_R2.get(publishedKey(section)));
+    const text =
+      (await getStorageData(env, draftKey(section))) ||
+      (await getStorageData(env, publishedKey(section)));
 
-    if (!obj) {
+    if (!text) {
       return new Response(JSON.stringify({ items: null }), {
         status: 200, headers: jsonHeaders(),
       });
     }
 
-    return new Response(await obj.text(), {
+    return new Response(text, {
       status: 200, headers: jsonHeaders(),
     });
   }
 
   // ── Public path ──────────────────────────────────────────────────────────
-  const obj = await env.EVENTURA_R2.get(publishedKey(section));
-  if (!obj) {
+  const text = await getStorageData(env, publishedKey(section));
+  if (!text) {
     // No published manifest yet — return empty so client keeps static fallback
     return new Response(JSON.stringify({ items: null, publishedAt: null }), {
       status: 200,
@@ -101,7 +141,6 @@ export async function onRequestGet({ request, env, params }: PagesContext): Prom
     });
   }
 
-  const text = await obj.text();
   return new Response(text, {
     status: 200,
     headers: jsonHeaders({
@@ -142,15 +181,11 @@ export async function onRequestPut({ request, env, params }: PagesContext): Prom
   });
 
   const key = isDraft ? draftKey(section) : publishedKey(section);
-  await env.EVENTURA_R2.put(key, manifest, {
-    httpMetadata: { contentType: "application/json" },
-  });
+  await putStorageData(env, key, manifest);
 
   // If publishing, also persist to draft key so admin always sees latest
   if (!isDraft) {
-    await env.EVENTURA_R2.put(draftKey(section), manifest, {
-      httpMetadata: { contentType: "application/json" },
-    });
+    await putStorageData(env, draftKey(section), manifest);
   }
 
   return new Response(
@@ -172,7 +207,7 @@ export async function onRequestDelete({ request, env, params }: PagesContext): P
     });
   }
 
-  await env.EVENTURA_R2.delete([publishedKey(section), draftKey(section)]);
+  await deleteStorageData(env, [publishedKey(section), draftKey(section)]);
   return new Response(JSON.stringify({ ok: true }), {
     status: 200, headers: jsonHeaders(),
   });

@@ -12,7 +12,10 @@ interface R2Bucket {
 }
 
 interface Env {
-  EVENTURA_R2: R2Bucket;
+  EVENTURA_R2?: R2Bucket;
+  EVENTURA_KV?: {
+    delete(key: string): Promise<void>;
+  };
   ADMIN_PASSWORD: string;
   JWT_SECRET: string;
 }
@@ -47,7 +50,11 @@ export async function onRequestDelete({ request, env }: PagesContext): Promise<R
     });
   }
 
-  await env.EVENTURA_R2.delete(key);
+  if (env.EVENTURA_KV) {
+    await env.EVENTURA_KV.delete(key);
+  } else if (env.EVENTURA_R2) {
+    await env.EVENTURA_R2.delete(key);
+  }
 
   return new Response(JSON.stringify({ ok: true, deleted: key }), {
     status: 200, headers: jsonHeaders(),
