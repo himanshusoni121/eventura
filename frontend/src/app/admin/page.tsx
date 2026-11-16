@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
           <div className="relative w-16 h-16 mb-4">
-            <Image src="/images/logo.png" alt="Eventura" fill className="object-contain" />
+            <Image src="/images/logo.png" alt="Eventura" fill priority className="object-contain" />
           </div>
           <h1 className="font-heading text-2xl font-bold text-white tracking-wide">
             Eventura

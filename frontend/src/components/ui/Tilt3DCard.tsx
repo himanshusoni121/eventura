@@ -6,25 +6,34 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 interface Tilt3DCardProps {
   children: React.ReactNode;
   className?: string;
-  /** max tilt in degrees, kept low for a professional, non-gimmicky feel */
+  /** max tilt in degrees, default 10 for refined luxury feel */
   maxTilt?: number;
   /** subtle light sweep that follows the cursor */
   glare?: boolean;
+  /** champagne gold specular sheen that adds luxury brilliance */
+  goldSheen?: boolean;
   /** slight forward lift (translateZ) on hover for extra depth */
   lift?: boolean;
+  /** scale factor on hover */
+  scale?: number;
+  /** 3D perspective depth */
+  perspective?: number;
 }
 
 /**
- * Wraps content in a real 3D tilt that responds to cursor position,
- * plus an optional soft glare sweep. Kept subtle (small tilt angles,
- * spring damping) so it reads as premium rather than a toy effect.
+ * Premium 3D Perspective Card
+ * Generates true multi-layer 3D depth, specular reflection, and
+ * light-catching rim shine tailored for luxury photography and event showcases.
  */
 export default function Tilt3DCard({
   children,
   className = "",
   maxTilt = 12,
   glare = true,
+  goldSheen = true,
   lift = true,
+  scale = 1.02,
+  perspective = 1000,
 }: Tilt3DCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
@@ -32,10 +41,13 @@ export default function Tilt3DCard({
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
 
-  const springConfig = { stiffness: 150, damping: 18, mass: 0.6 };
+  // Smooth, weighted spring physics mimicking physical luxury materials
+  const springConfig = { stiffness: 220, damping: 22, mass: 0.5 };
   const rotateX = useSpring(useTransform(y, [0, 1], [maxTilt, -maxTilt]), springConfig);
   const rotateY = useSpring(useTransform(x, [0, 1], [-maxTilt, maxTilt]), springConfig);
-  const translateZ = useSpring(hovered && lift ? 40 : 0, springConfig);
+  const translateZ = useSpring(hovered && lift ? 25 : 0, springConfig);
+  const cardScale = useSpring(hovered ? scale : 1, springConfig);
+
   const glareX = useTransform(x, (v) => `${v * 100}%`);
   const glareY = useTransform(y, (v) => `${v * 100}%`);
 
@@ -52,9 +64,18 @@ export default function Tilt3DCard({
     y.set(0.5);
   };
 
+  // Dynamic light sweep that radiates outwards from pointer
   const glareBackground = useTransform(
     [glareX, glareY],
-    ([gx, gy]) => `radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.14), transparent 55%)`
+    ([gx, gy]) =>
+      `radial-gradient(circle 320px at ${gx} ${gy}, rgba(255, 255, 255, 0.18), transparent 70%)`
+  );
+
+  // Specular champagne gold highlight that creates metallic reflection
+  const goldSheenBackground = useTransform(
+    [glareX, glareY],
+    ([gx, gy]) =>
+      `radial-gradient(circle 240px at ${gx} ${gy}, rgba(212, 175, 55, 0.22), transparent 60%)`
   );
 
   return (
@@ -67,24 +88,56 @@ export default function Tilt3DCard({
         rotateX,
         rotateY,
         translateZ,
-        transformPerspective: 700,
+        scale: cardScale,
+        transformPerspective: perspective,
         transformStyle: "preserve-3d",
       }}
-      className={`relative ${className}`}
+      className={`relative will-change-transform ${className}`}
     >
-      {children}
+      {/* 3D Child Elements */}
+      <div className="w-full h-full [transform-style:preserve-3d]">
+        {children}
+      </div>
 
+      {/* Luminous Specular Glare Layer */}
       {glare && (
         <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[inherit]"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden z-30"
           style={{
             background: glareBackground as unknown as string,
           }}
           animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.25 }}
         />
       )}
+
+      {/* Royal Gold Micro-Sheen */}
+      {goldSheen && (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden z-20 mix-blend-screen"
+          style={{
+            background: goldSheenBackground as unknown as string,
+          }}
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
+        />
+      )}
+
+      {/* Interactive 3D Gold Border Edge Glow */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-[1px] rounded-[inherit] border border-[#D4AF37]/0 transition-colors duration-300 z-40"
+        style={{
+          boxShadow: hovered
+            ? "0 12px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(212, 175, 55, 0.25)"
+            : "none",
+        }}
+        animate={{
+          borderColor: hovered ? "rgba(212, 175, 55, 0.45)" : "rgba(212, 175, 55, 0)",
+        }}
+      />
     </motion.div>
   );
 }

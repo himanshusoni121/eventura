@@ -14,6 +14,7 @@ import { isLoggedIn, logout } from "@/lib/admin-api";
 import {
   LayoutDashboard,
   Images,
+  FolderKanban,
   GalleryHorizontalEnd,
   ImageIcon,
   LogOut,
@@ -30,6 +31,7 @@ import {
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { href: "/admin/portfolio", label: "Portfolio", Icon: Images },
+  { href: "/admin/categories", label: "Categories", Icon: FolderKanban },
   { href: "/admin/marquee", label: "Slider", Icon: GalleryHorizontalEnd },
   { href: "/admin/hero", label: "Hero Image", Icon: ImageIcon },
   { href: "/admin/about", label: "About", Icon: FileText },
@@ -61,20 +63,20 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[#0B0B0F] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0D0E12] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0B0F] flex">
+    <div className="min-h-screen bg-[#0D0E12] flex">
       {/* ── Sidebar (desktop) ──────────────────────────────────────────── */}
-      <aside className="hidden md:flex flex-col w-64 min-h-screen border-r border-white/8 bg-[#0e0e14] sticky top-0 h-screen">
+      <aside className="hidden md:flex flex-col w-64 min-h-screen border-r border-white/8 bg-[#13151B] sticky top-0 h-screen">
         {/* Brand */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-white/8">
           <div className="relative w-8 h-8 shrink-0">
-            <Image src="/images/logo.png" alt="Eventura" fill className="object-contain" />
+            <Image src="/images/logo.png" alt="Eventura" fill priority className="object-contain" />
           </div>
           <div>
             <p className="font-heading text-base font-bold text-white leading-tight">Eventura</p>
@@ -129,13 +131,13 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           onClick={() => setSidebarOpen(false)}
         >
           <aside
-            className="absolute left-0 top-0 bottom-0 w-64 bg-[#0e0e14] border-r border-white/8 flex flex-col"
+            className="absolute left-0 top-0 bottom-0 w-64 bg-[#13151B] border-r border-white/8 flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
               <div className="flex items-center gap-2">
                 <div className="relative w-7 h-7">
-                  <Image src="/images/logo.png" alt="Eventura" fill className="object-contain" />
+                  <Image src="/images/logo.png" alt="Eventura" fill priority className="object-contain" />
                 </div>
                 <span className="font-heading text-white font-bold text-base">Eventura</span>
               </div>
@@ -189,7 +191,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           </button>
           <div className="flex items-center gap-2">
             <div className="relative w-6 h-6">
-              <Image src="/images/logo.png" alt="Eventura" fill className="object-contain" />
+              <Image src="/images/logo.png" alt="Eventura" fill priority className="object-contain" />
             </div>
             <span className="font-heading text-white font-bold text-sm">Admin</span>
           </div>

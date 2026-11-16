@@ -20,6 +20,7 @@ export const siteConfig = {
     youtube: "https://youtube.com/@eventura",
     linkedin: "https://linkedin.com/company/eventura",
   },
+  backgroundImage: "/images/home.png",
 };
 
 // ----- Navigation -----
@@ -117,14 +118,25 @@ export const stats = [
   { label: "Years of Experience", value: 2, suffix: "+" },
 ];
 
-// ----- Portfolio -----
-export type PortfolioCategory =
-  | "all"
-  | "destination"
-  | "mehndi"
-  | "reception"
-  | "phere"
-  | "baraat";
+// ----- Portfolio & Categories -----
+export type PortfolioCategory = string;
+
+export interface CategoryItem {
+  id: string;
+  label: string;
+  description?: string;
+  icon?: string;
+}
+
+export const defaultCategories: CategoryItem[] = [
+  { id: "destination", label: "Destination", description: "Royal destination weddings across palaces & heritage forts" },
+  { id: "mehndi", label: "Mehndi", description: "Vibrant henna celebrations with traditional music and bespoke setups" },
+  { id: "reception", label: "Reception", description: "Glamorous evening receptions with cinematic lighting and entertainment" },
+  { id: "phere", label: "Phere", description: "Sacred wedding rituals under ethereal floral mandap canopies" },
+  { id: "baraat", label: "Baraat", description: "High-energy royal baraat processions with vintage cars and live dhol" },
+  { id: "corporate", label: "Corporate", description: "Elite business summits, awards galas, and professional conventions" },
+  { id: "cultural", label: "Cultural", description: "Authentic Rajasthani folk festivals and heritage celebrations" },
+];
 
 export interface PortfolioItem {
   id: number;
@@ -143,11 +155,7 @@ export interface PortfolioItem {
 export const portfolioCategories: { label: string; value: PortfolioCategory }[] =
   [
     { label: "All", value: "all" },
-    { label: "Destination", value: "destination" },
-    { label: "Mehndi", value: "mehndi" },
-    { label: "Reception", value: "reception" },
-    { label: "Phere", value: "phere" },
-    { label: "Baraat", value: "baraat" },
+    ...defaultCategories.map((c) => ({ label: c.label, value: c.id })),
   ];
 
 // ----- Homepage Slider Items (Original Portfolio Images preserved strictly for top continuous slider) -----

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/ui/Preloader";
+import { siteConfig } from "@/lib/data";
 import JsonLd from "@/components/JsonLd";
 
 const playfair = Playfair_Display({

@@ -63,7 +63,7 @@ export default function Hero() {
   return (
     <section id="home" ref={sectionRef} className="relative min-h-[85vh] sm:min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-24 sm:pt-28 md:pt-24 pb-12 sm:pb-16 md:pb-0 px-4 sm:px-6 md:px-12" style={{ perspective: 1000 }}>
       {/* Background Image */}
-      <motion.div className="absolute inset-0 z-0 bg-[#0B0B0F]" style={{ scale: bgScale, y: bgY }}>
+      <motion.div className="absolute inset-0 z-0 bg-[#0D0E12]" style={{ scale: bgScale, y: bgY }}>
         <Image
           src={heroImage}
           alt="Luxury Event"
@@ -73,7 +73,7 @@ export default function Hero() {
           className="object-cover opacity-80"
         />
         {/* Dark Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0F]/90 via-[#0B0B0F]/60 to-[#0B0B0F]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0D0E12]/90 via-[#0D0E12]/60 to-[#0D0E12]" />
       </motion.div>
 
       {/* Mouse Follow Glow */}

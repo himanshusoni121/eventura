@@ -1,5 +1,6 @@
 name = "eventura"
 pages_build_output_dir = "./frontend/out"
+pages_functions_dir = "./backend/functions"
 compatibility_date = "2024-09-23"
 
 # ── Cloudflare KV Namespace ───────────────────────────────────────────────────

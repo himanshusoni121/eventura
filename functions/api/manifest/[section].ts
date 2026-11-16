@@ -40,7 +40,7 @@ interface PagesContext {
   params: Record<string, string | string[]>;
 }
 
-const VALID_SECTIONS = ["portfolio", "marquee", "hero", "about", "services", "statistics", "testimonials", "contact", "site"] as const;
+const VALID_SECTIONS = ["portfolio", "marquee", "hero", "about", "services", "statistics", "testimonials", "contact", "site", "categories"] as const;
 type Section = (typeof VALID_SECTIONS)[number];
 
 function publishedKey(section: Section) {

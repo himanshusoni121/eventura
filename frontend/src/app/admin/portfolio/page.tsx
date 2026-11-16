@@ -12,10 +12,12 @@ import {
 } from "@/lib/admin-api";
 import {
   portfolioItems as staticItems,
-  portfolioCategories,
+  defaultCategories,
   type PortfolioItem,
   type PortfolioCategory,
+  type CategoryItem,
 } from "@/lib/data";
+import Link from "next/link";
 import Image from "next/image";
 import {
   Upload,
@@ -44,6 +46,7 @@ const SECTION: Section = "portfolio";
 
 export default function PortfolioAdminPage() {
   const [items, setItems] = useState<DraftItem[]>([]);
+  const [availableCategories, setAvailableCategories] = useState<CategoryItem[]>(defaultCategories);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -58,12 +61,18 @@ export default function PortfolioAdminPage() {
   useEffect(() => {
     async function load() {
       try {
-        const data = (await getManifest(SECTION, true)) as {
-          items?: DraftItem[];
-        } | null;
-        if (data?.items && Array.isArray(data.items) && data.items.length > 0) {
-          setItems(data.items);
-          nextId.current = Math.max(...data.items.map((i) => i.id)) + 1;
+        const [portData, catData] = await Promise.all([
+          getManifest(SECTION, true) as Promise<{ items?: DraftItem[] } | null>,
+          getManifest("categories", true) as Promise<{ items?: CategoryItem[] } | null>,
+        ]);
+
+        if (catData?.items && Array.isArray(catData.items) && catData.items.length > 0) {
+          setAvailableCategories(catData.items);
+        }
+
+        if (portData?.items && Array.isArray(portData.items) && portData.items.length > 0) {
+          setItems(portData.items);
+          nextId.current = Math.max(...portData.items.map((i) => i.id)) + 1;
         } else {
           setItems(staticItems.map((i) => ({ ...i })));
           nextId.current = Math.max(...staticItems.map((i) => i.id)) + 1;
@@ -371,14 +380,22 @@ export default function PortfolioAdminPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#8a8a9a] font-medium block mb-1.5">Category</label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs text-[#8a8a9a] font-medium block">Category</label>
+                    <Link
+                      href="/admin/categories"
+                      className="text-[11px] text-[#D4AF37] hover:underline flex items-center gap-1"
+                    >
+                      <span>+ Manage Categories</span>
+                    </Link>
+                  </div>
                   <select
                     value={item.category}
-                    onChange={(e) => updateItem(item.id, { category: e.target.value as PortfolioCategory })}
+                    onChange={(e) => updateItem(item.id, { category: e.target.value })}
                     className="w-full bg-[#141420] border border-white/12 text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-[#D4AF37] transition-all"
                   >
-                    {portfolioCategories.filter((c) => c.value !== "all").map((c) => (
-                      <option key={c.value} value={c.value}>{c.label}</option>
+                    {availableCategories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.label}</option>
                     ))}
                   </select>
                 </div>

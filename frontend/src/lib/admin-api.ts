@@ -54,7 +54,7 @@ async function apiFetch(
 // ── Auth API ──────────────────────────────────────────────────────────────────
 
 export async function login(password: string): Promise<{ ok: boolean; error?: string }> {
-  const res = await fetch("/api/login", {
+  const res = await fetch("http://127.0.0.1:8788/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ password }),
@@ -73,7 +73,7 @@ export function logout(): void {
 
 // ── Manifest API ──────────────────────────────────────────────────────────────
 
-export type Section = "portfolio" | "marquee" | "hero" | "about" | "services" | "statistics" | "testimonials" | "contact" | "site";
+export type Section = "portfolio" | "marquee" | "hero" | "about" | "services" | "statistics" | "testimonials" | "contact" | "site" | "categories";
 
 export async function getManifest(section: Section, draft = false): Promise<unknown> {
   const url = draft

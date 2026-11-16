@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import AdminShell from "../_components/AdminShell";
 import { getManifest } from "@/lib/admin-api";
-import { portfolioItems, marqueeItemsList, services, stats, testimonials } from "@/lib/data";
+import { portfolioItems, marqueeItemsList, services, stats, testimonials, defaultCategories } from "@/lib/data";
 import Link from "next/link";
-import { Images, GalleryHorizontalEnd, ImageIcon, CheckCircle2, Clock, ArrowRight, FileText, Briefcase, BarChart3, MessageSquare, Phone, Settings } from "lucide-react";
+import { Images, FolderKanban, GalleryHorizontalEnd, ImageIcon, CheckCircle2, Clock, ArrowRight, FileText, Briefcase, BarChart3, MessageSquare, Phone, Settings } from "lucide-react";
 
 interface SectionStat {
   label: string;
@@ -27,6 +27,15 @@ export default function DashboardPage() {
       publishedCount: null,
       lastPublished: null,
       color: "#D4AF37",
+    },
+    {
+      label: "Event Categories",
+      icon: <FolderKanban className="w-5 h-5" />,
+      href: "/admin/categories",
+      staticCount: defaultCategories.length,
+      publishedCount: null,
+      lastPublished: null,
+      color: "#10B981",
     },
     {
       label: "Homepage Slider",
@@ -104,7 +113,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchStats() {
-      const sections = ["portfolio", "marquee", "hero", "about", "services", "statistics", "testimonials", "contact", "site"] as const;
+      const sections = ["portfolio", "categories", "marquee", "hero", "about", "services", "statistics", "testimonials", "contact", "site"] as const;
       const results = await Promise.all(
         sections.map((s) =>
           getManifest(s, true).then((d) => {
