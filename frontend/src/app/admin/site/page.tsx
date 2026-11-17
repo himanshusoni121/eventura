@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminShell from "../_components/AdminShell";
 import { getManifest, saveDraft, publishManifest } from "@/lib/admin-api";
 import { siteConfig as staticSiteConfig } from "@/lib/data";
-import { Loader2, AlertCircle, Check, Globe, Save, Settings } from "lucide-react";
+import { Loader2, AlertCircle, Check, Globe, Save } from "lucide-react";
 
 const SECTION = "site" as const;
 
@@ -17,12 +17,12 @@ interface SiteManifest {
   updatedAt?: string;
 }
 
-
 export default function SiteAdminPage() {
   const [data, setData] = useState<SiteManifest>({
     name: staticSiteConfig.name,
     tagline: staticSiteConfig.tagline,
     description: staticSiteConfig.description,
+    backgroundImage: staticSiteConfig.backgroundImage,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -32,7 +32,7 @@ export default function SiteAdminPage() {
   useEffect(() => {
     getManifest(SECTION, true)
       .then((d) => {
-        if (d) setData({ ...data, ...(d as SiteManifest) });
+        if (d) setData((prev) => ({ ...prev, ...(d as SiteManifest) }));
       })
       .finally(() => setLoading(false));
   }, []);
@@ -64,16 +64,6 @@ export default function SiteAdminPage() {
         <div className="flex items-center justify-center h-64">
           <Loader2 className="w-8 h-8 text-[#D4AF37] animate-spin" />
         </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
       </AdminShell>
     );
   }
@@ -81,24 +71,16 @@ export default function SiteAdminPage() {
   return (
     <AdminShell>
       {toast && (
-        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium shadow-2xl ${
-          toast.type === "success"
-            ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-300"
-            : "bg-red-500/20 border border-red-500/40 text-red-300"
-        }`}>
+        <div
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium shadow-2xl ${
+            toast.type === "success"
+              ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-300"
+              : "bg-red-500/20 border border-red-500/40 text-red-300"
+          }`}
+        >
           {toast.type === "success" ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
           {toast.msg}
         </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
       )}
 
       <div className="mb-6">
@@ -107,16 +89,6 @@ export default function SiteAdminPage() {
           Edit global site information and branding.
         </p>
       </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
 
       <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-6 max-w-3xl">
         <div>
@@ -131,16 +103,6 @@ export default function SiteAdminPage() {
             className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
           />
         </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
 
         <div>
           <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">
@@ -154,16 +116,6 @@ export default function SiteAdminPage() {
             className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
           />
         </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
 
         <div>
           <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">
@@ -177,16 +129,19 @@ export default function SiteAdminPage() {
             className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all resize-none"
           />
         </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
+
+        <div>
+          <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">
+            Background Image URL
+          </label>
+          <input
+            type="text"
+            value={data.backgroundImage ?? ""}
+            onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
+            placeholder="/images/home.png"
+            className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
+          />
+        </div>
 
         <div className="flex gap-3 pt-4 border-t border-white/8">
           <button
@@ -206,16 +161,6 @@ export default function SiteAdminPage() {
             Publish
           </button>
         </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
 
         {data.publishedAt && (
           <p className="text-xs text-[#6a6a7a] pt-2">
@@ -223,16 +168,6 @@ export default function SiteAdminPage() {
           </p>
         )}
       </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
 
       <div className="mt-6 bg-white/3 border border-white/8 rounded-xl p-4">
         <h3 className="text-xs font-semibold text-[#D4AF37] mb-2">Note</h3>
@@ -240,16 +175,6 @@ export default function SiteAdminPage() {
           These settings affect the hero section and SEO metadata. Changes appear on the live site within 30 seconds after publishing.
         </p>
       </div>
-<div className="mt-4">
-  <label className="text-xs font-semibold text-[#8a8a9a] uppercase tracking-wider mb-2 block">Background Image URL</label>
-  <input
-    type="text"
-    value={data.backgroundImage ?? ""}
-    onChange={(e) => setData({ ...data, backgroundImage: e.target.value })}
-    placeholder="/images/bg.jpg"
-    className="w-full bg-white/6 border border-white/12 text-white rounded-xl px-4 py-3 text-sm outline-none focus:border-[#D4AF37] transition-all"
-  />
-</div>
     </AdminShell>
   );
 }

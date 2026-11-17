@@ -8,7 +8,7 @@
     "start": "cd frontend && npm run start",
     "lint": "cd frontend && npm run lint",
     "deploy": "npm run build && cd backend && npm run deploy",
-    "backend:dev": "cd backend && npm run dev"
+    "backend:dev": "node ./backend/node_modules/wrangler/bin/wrangler.js pages dev ./frontend/out --port 8788"
   },
   "workspaces": [
     "frontend",
