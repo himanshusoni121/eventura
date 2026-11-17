@@ -54,7 +54,7 @@ async function apiFetch(
 // ── Auth API ──────────────────────────────────────────────────────────────────
 
 export async function login(password: string): Promise<{ ok: boolean; error?: string }> {
-  const res = await fetch("http://127.0.0.1:8788/api/login", {
+  const res = await fetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ password }),

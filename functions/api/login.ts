@@ -48,12 +48,19 @@ export async function onRequestPost({ request, env }: PagesContext): Promise<Res
     }
 
     // Timing-safe comparison — prevents timing-based brute-force
+    const userPassword = (body.password ?? "").trim();
+    const envPassword = (env.ADMIN_PASSWORD ?? "").trim().replace(/^["']|["']$/g, "");
+
     const enc = new TextEncoder();
-    const a = enc.encode(body.password);
-    const b = enc.encode(env.ADMIN_PASSWORD);
+    const a = enc.encode(userPassword);
+    const b = enc.encode(envPassword);
     let diff = a.length !== b.length ? 1 : 0;
     const len = Math.max(a.length, b.length);
     for (let i = 0; i < len; i++) diff |= (a[i] ?? 0) ^ (b[i] ?? 0);
+
+    if (diff !== 0 && userPassword === env.ADMIN_PASSWORD) {
+      diff = 0;
+    }
 
     if (diff !== 0) {
       // Add slight delay to further slow brute-force
